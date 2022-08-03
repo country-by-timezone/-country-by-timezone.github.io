@@ -3,9 +3,9 @@
   <meta charset="UTF-8" />
   <title>Country by timezone</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="https://unpkg.com/alpinejs" defer></script>
   <body class="bg-gray-100">
-    <div class="flex justify-center items-center h-screen">
+    <div class="flex justify-center items-center h-screen" x-data="country">
       <div class="flex flex-col">
         <div class="drop-shadow-md bg-white rounded p-5 inline-block">
           <div class="flex items-center">
@@ -14,33 +14,56 @@
                 width="128"
                 alt="BR"
                 class="inline-block"
-                src="http://purecatamphetamine.github.io/country-flag-icons/3x2/BR.svg"
+                :src="`http://purecatamphetamine.github.io/country-flag-icons/3x2/${country.abbr}.svg`"
               />
             </div>
             <div class="flex-1 ml-3">
-              <h3 class="text-3xl font-bold">BR</h3>
-              <span class="text-3xl">Brazil</span>
+              <h3 class="text-3xl font-bold" x-text="country.abbr"></h3>
+              <span class="text-3xl" x-text="country.name"></span>
             </div>
           </div>
         </div>
         <span class="text-gray-500 mt-3 text-center">
-          Timezone: America/Sao_paulo
+          Timezone: <strong x-text="timeZone"></strong>
         </span>
       </div>
     </div>
 
-    {#
     <script>
       document.addEventListener("alpine:init", () => {
         Alpine.data("country", () => ({
-          open: false,
+          init() {
+            this.isLoading = true;
+            fetch("https://country-by-timezone.github.io/data.json")
+              .then((resp) => resp.json())
+              .then((resp) => {
+                this.contries = resp;
+                this.isLoading = false;
+              });
+          },
 
-          toggle() {
-            this.open = !this.open;
+          isLoading: false,
+
+          contries: {},
+
+          get timeZone() {
+            return Intl.DateTimeFormat().resolvedOptions().timeZone;
+          },
+
+          get country() {
+            if (
+              !this.contries ||
+              this.isLoading ||
+              Object.keys(this.contries).length === 0
+            )
+              return {};
+
+            return Object.values(this.contries).find((item) => {
+              return item.zones.some((zone) => zone === this.timeZone);
+            });
           },
         }));
       });
     </script>
-    #}
   </body>
 </html>
