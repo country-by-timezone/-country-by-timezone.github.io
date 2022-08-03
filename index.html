@@ -1,1 +1,46 @@
-<h1>Test</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8" />
+  <title>Country by timezone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <body class="bg-gray-100">
+    <div class="flex justify-center items-center h-screen">
+      <div class="flex flex-col">
+        <div class="drop-shadow-md bg-white rounded p-5 inline-block">
+          <div class="flex items-center">
+            <div class="flex-none">
+              <img
+                width="128"
+                alt="BR"
+                class="inline-block"
+                src="http://purecatamphetamine.github.io/country-flag-icons/3x2/BR.svg"
+              />
+            </div>
+            <div class="flex-1 ml-3">
+              <h3 class="text-3xl font-bold">BR</h3>
+              <span class="text-3xl">Brazil</span>
+            </div>
+          </div>
+        </div>
+        <span class="text-gray-500 mt-3 text-center">
+          Timezone: America/Sao_paulo
+        </span>
+      </div>
+    </div>
+
+    {#
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("country", () => ({
+          open: false,
+
+          toggle() {
+            this.open = !this.open;
+          },
+        }));
+      });
+    </script>
+    #}
+  </body>
+</html>
